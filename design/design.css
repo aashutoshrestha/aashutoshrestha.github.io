@@ -1,0 +1,101 @@
+@font-face{ 
+	font-family: 'MyWebFont';
+	src: url('whitrabt-webfont.eot');
+	src: url('whitrabt-webfont.eot?iefix') format('eot'),
+	     url('whitrabt-webfont.woff') format('woff'),
+	     url('whitrabt-webfont.ttf') format('truetype'),
+	     url('whitrabt-webfont.svg#webfont') format('svg');
+}
+
+body {
+	background-image: url(../resources/bodybackground.jpg);
+	background-repeat:no-repeat;
+   background-size:cover;
+    background-color: #282830;
+	font-family: 'MyWebFont';
+	 font-weight: bold;
+	margin-top:50px;
+ margin-left:100px;
+ margin-right:100px;
+
+}
+
+#menu{
+	color: #cccccc;
+	font-size: 35px;
+	 cursor: pointer;
+}
+#menu:hover{
+	color: #0E9EB9;
+	cursor: pointer;
+}
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p {
+	
+    font-size: 15px;
+	
+}
+a {
+	color:#cccccc;
+    text-decoration: none;
+}
+
+a:hover 
+{
+     color:#0E9EB9; 
+     text-decoration:none; 
+     cursor:pointer;  
+}
+#divmenu{
+	padding-top:120px;
+}
+#title{
+	font-size :60px;
+	color: white;
+	
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+	 margin: 0 auto;
+}
+#header{
+	right:20px;
+	position:fixed;
+	top:0;
+	padding-top:0;
+	padding-bottom:20px;
+	color:white;
+}
+
+#text1{
+	color:white;
+	font-size:30px;
+	margin-top:60px;
+	margin-right:30px;
+	margin-left:30px;
+	padding-top:60px;
+}
+#text2{
+	color:white;
+	font-size:40px;
+}
+#text2:hover{
+	color:#0E9EB9;
+}
+#currentmenu{
+	color:orange;
+}
+#currentmenu:hover{
+	color:white;
+}
+
+#container{width:100%;}
+#left{float:left;}
+#right{float:right;}
+#center{margin:0 auto;width:100px;}
