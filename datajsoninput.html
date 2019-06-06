@@ -39,6 +39,7 @@
                     <input type="text" id="input_word_porn" value="" placeholder="Poem">
                     <input type ="text" id ="title" value="" placeholder="Title">
                     <input type ="text" id="author" value="" placeholder="Author">
+                    <input type="text" id="genre" value="" placeholder="Genre">
                     <input id="btn"  type="button" class="waves-effect waves-light btn" value="Add Poem" onclick="addToJson()" />
     
                 </form>
@@ -71,13 +72,15 @@
                 var wordPorn = document.getElementById('input_word_porn').value;
                 var titlePoem = document.getElementById('title').value;
                 var authorPoem = document.getElementById('author').value;
+                var genrePoem = document.getElementById('genre').value;
                 let lastDataInput = inputJson.data.length - 1
                 let lastData = inputJson.data[lastDataInput]                
                 let appendJson = {
                     "id": lastData.id + 1,
                     "desc": wordPorn,
                     "author": authorPoem,
-                    "title" : titlePoem
+                    "title" : titlePoem,
+                    "genre" : genrePoem
                 }
                 inputJson.data.push(appendJson)
                 document.getElementById('output').innerHTML = JSON.stringify(inputJson, null, 4);
