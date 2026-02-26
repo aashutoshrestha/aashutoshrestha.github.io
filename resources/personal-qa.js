@@ -53,8 +53,21 @@ const personalKeywords = [
   "kathmandu",
   "resume",
   "contact",
+  "available",
+  "availability",
+  "hire",
+  "proposal",
+  "project proposal",
+  "collaboration",
   "work",
   "career",
+  "focus",
+  "backend",
+  "website",
+  "web",
+  "llm",
+  "software engineer",
+  "sdlc",
   "languages",
   "degree"
 ];
@@ -193,6 +206,16 @@ function getDirectAnswer(question) {
     return `Aashutosh is a highly capable engineer with ${strengthsText}. He communicates clearly across teams and applies strong research skills to deliver practical, data-informed outcomes.`;
   }
 
+  if (includesAny(q, ["title", "role", "who is he", "profession", "what does he do"])) {
+    if (profile.title) {
+      return `Aashutosh Shrestha is a ${profile.title}.`;
+    }
+  }
+
+  if (includesAny(q, ["main focus", "focus", "specialize", "specialise", "specialty", "speciality"])) {
+    return "His main focus is mobile app engineering, and he also has experience with LLM integration, website development, backend development, and SDLC.";
+  }
+
   if (includesAny(q, ["ideology", "political", "leftist", "left wing"])) {
     if (profile.ideology) {
       return `His ideology is ${profile.ideology.toLowerCase()}.`;
@@ -235,6 +258,11 @@ function getDirectAnswer(question) {
   if (includesAny(q, ["email", "contact", "reach", "phone", "call"])) {
     const email = profile.contact && profile.contact.email ? profile.contact.email : "N/A";
     return `You can contact Aashutosh at ${email}.`;
+  }
+
+  if (includesAny(q, ["available", "availability", "hire", "project", "proposal", "collaboration", "work with"])) {
+    const email = profile.contact && profile.contact.email ? profile.contact.email : "N/A";
+    return `He is available to work on projects. For any proposal, contact him at ${email}.`;
   }
 
   if (includesAny(q, ["hobby", "hobbies", "likes", "love", "free time", "movies", "books", "documentaries", "games", "gaming", "eat"])) {
