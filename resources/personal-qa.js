@@ -74,6 +74,24 @@ const blockedGeneralTopics = [
 let generator = null;
 let loadingModel = null;
 
+async function loadTransformersModule() {
+  const cdnSources = [
+    "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2",
+    "https://unpkg.com/@xenova/transformers@2.17.2"
+  ];
+
+  let lastError = null;
+  for (const source of cdnSources) {
+    try {
+      return await import(source);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Unable to load transformers module from CDN.");
+}
+
 function normalize(text) {
   return (text || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
 }
@@ -266,7 +284,7 @@ async function ensureModelLoaded() {
 
   loadingModel = (async () => {
     statusEl.textContent = "Model status: Loading lightweight browser model...";
-    const { pipeline, env } = await import("https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2");
+    const { pipeline, env } = await loadTransformersModule();
     env.allowLocalModels = false;
     env.useBrowserCache = true;
 
@@ -345,9 +363,27 @@ async function answerQuestion() {
   }
 }
 
+function initializeAssistant() {
+  if (!statusEl || !outputEl || !inputEl || !askButtonEl) {
+    return;
+  }
+
+  statusEl.textContent = "Model status: Initializing...";
+
+  ensureModelLoaded()
+    .then(() => {
+      statusEl.textContent = "Model status: Ready (running in your browser)";
+    })
+    .catch(() => {
+      statusEl.textContent = "Model status: Fallback mode (resume-only retrieval)";
+    });
+}
+
 askButtonEl.addEventListener("click", answerQuestion);
 inputEl.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     answerQuestion();
   }
 });
+
+initializeAssistant();
