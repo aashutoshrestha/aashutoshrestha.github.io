@@ -19,13 +19,6 @@ window.AASHUTOSH_PROFILE = {
   contact: {
     email: "contact@aashutoshrestha.com.np"
   },
-  family: {
-    father: "Ramesh Kumar Shrestha",
-    mother: "Urmila Singh",
-    sister: "Amisha Shrestha",
-    grandfather: "Buddhi Sagar Shrestha",
-    grandmother: "Shanti Devi Shrestha"
-  },
   personalLife: {
     schoolAchievements: "Won many quiz and speech competitions during school.",
     likes: [
@@ -101,7 +94,6 @@ window.AASHUTOSH_PROFILE_KB = [
   "He has strong communication and research skills.",
   "One of his papers is referenced in IEEE.",
   "Google Scholar profile: https://scholar.google.com/citations?user=e58wgC0AAAAJ&hl=en",
-  "Family details: father Ramesh Kumar Shrestha, mother Urmila Singh, sister Amisha Shrestha, grandfather Buddhi Sagar Shrestha, grandmother Shanti Devi Shrestha.",
   "During school, he won many quiz and speech competitions.",
   "He loves watching movies and reading books.",
   "Favorite hobbies include playing video games, reading books, watching documentaries, and eating out.",

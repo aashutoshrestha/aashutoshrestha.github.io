@@ -6,6 +6,9 @@ const askButtonEl = document.getElementById("qaAskButton");
 const refusalText =
   "I can only answer questions about Aashutosh Shrestha based on this website and resume.";
 
+const assistantIdentityText =
+  "I am only the AI assistant of Aashutosh Shrestha. Please ask questions regarding him.";
+
 const personalKeywords = [
   "aashutosh",
   "you",
@@ -13,6 +16,9 @@ const personalKeywords = [
   "he",
   "his",
   "him",
+  "they",
+  "their",
+  "them",
   "live",
   "lives",
   "location",
@@ -23,12 +29,6 @@ const personalKeywords = [
   "birth",
   "dob",
   "age",
-  "father",
-  "mother",
-  "sister",
-  "grandfather",
-  "grandmother",
-  "family",
   "ideology",
   "leftist",
   "hobby",
@@ -146,31 +146,46 @@ function includesAny(text, words) {
   return words.some((word) => text.includes(word));
 }
 
-function stylizeAnswer(answer) {
+function isDirectedAtAssistant(question) {
+  const q = normalize(question);
+
+  const directYouPatterns = [
+    /\bwho are you\b/,
+    /\bwhat are you\b/,
+    /\babout you\b/,
+    /\byourself\b/,
+    /\byour\b/,
+    /\bare you\b/,
+    /\bdo you\b/,
+    /\bwhere do you\b/,
+    /\bhow are you\b/
+  ];
+
+  return directYouPatterns.some((pattern) => pattern.test(q));
+}
+
+function preciseAnswer(answer) {
   const text = (answer || "").trim();
   if (!text || text === refusalText) {
     return text;
   }
 
-  const hasPraiseTone = /highly|strong|capable|excellent|effective|impressive|skilled/i.test(text);
-  let result = text;
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 3);
 
-  if (!hasPraiseTone) {
-    result = `${result} He is known for being highly capable, dependable, and impactful in his work.`;
-  }
-
-  if (result.length < 150) {
-    result = `${result} Overall, he brings a strong blend of technical depth, communication, and practical problem-solving.`;
-  }
-
-  return result;
+  const compact = lines.join(" ");
+  const sentences = compact.split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 2);
+  return sentences.length ? sentences.join(" ") : compact;
 }
 
 function getDirectAnswer(question) {
   const q = normalize(question);
   const profile = window.AASHUTOSH_PROFILE || {};
 
-  if (includesAny(q, ["how are you", "how is he", "how is aashutosh", "what kind of", "tell me about him", "personality", "strengths"])) {
+  if (includesAny(q, ["how is he", "how is aashutosh", "how are they", "what kind of", "tell me about him", "tell me about them", "personality", "strengths"])) {
     const strengths = Array.isArray(profile.strengths) ? profile.strengths : [];
     const strengthsText = strengths.length
       ? strengths.join("; ")
@@ -220,11 +235,6 @@ function getDirectAnswer(question) {
   if (includesAny(q, ["email", "contact", "reach", "phone", "call"])) {
     const email = profile.contact && profile.contact.email ? profile.contact.email : "N/A";
     return `You can contact Aashutosh at ${email}.`;
-  }
-
-  if (includesAny(q, ["father", "mother", "sister", "grandfather", "grandmother", "family", "parents"])) {
-    const family = profile.family || {};
-    return `Family details: father ${family.father || "N/A"}, mother ${family.mother || "N/A"}, sister ${family.sister || "N/A"}, grandfather ${family.grandfather || "N/A"}, grandmother ${family.grandmother || "N/A"}.`;
   }
 
   if (includesAny(q, ["hobby", "hobbies", "likes", "love", "free time", "movies", "books", "documentaries", "games", "gaming", "eat"])) {
@@ -297,14 +307,20 @@ async function ensureModelLoaded() {
 }
 
 function fallbackAnswer(question) {
-  const context = retrieveContext(question, 4);
-  return stylizeAnswer(`Based on Aashutosh's profile:\n- ${context.join("\n- ")}`);
+  const context = retrieveContext(question, 1);
+  return preciseAnswer(context[0] || refusalText);
 }
 
 async function answerQuestion() {
   const question = inputEl.value.trim();
   if (!question) {
     outputEl.textContent = "Please ask a question about Aashutosh Shrestha.";
+    return;
+  }
+
+  if (isDirectedAtAssistant(question)) {
+    outputEl.textContent = assistantIdentityText;
+    statusEl.textContent = "Model status: Ready (assistant guidance)";
     return;
   }
 
@@ -315,7 +331,7 @@ async function answerQuestion() {
 
   const directAnswer = getDirectAnswer(question);
   if (directAnswer) {
-    outputEl.textContent = stylizeAnswer(directAnswer);
+    outputEl.textContent = preciseAnswer(directAnswer);
     statusEl.textContent = "Model status: Ready (direct profile answer)";
     return;
   }
@@ -332,8 +348,8 @@ async function answerQuestion() {
       "You must ONLY answer questions about Aashutosh Shrestha.",
       "If the answer is not in context, reply exactly:",
       refusalText,
-      "Answer in plain text with 2-4 sentences.",
-      "Use a warm, professional, positive tone that praises him moderately (not exaggerated).",
+      "Answer exactly what is asked, with no extra details.",
+      "Use 1-2 short sentences in plain text.",
       "Context:",
       ...contextItems.map((item) => `- ${item}`),
       `Question: ${question}`,
@@ -341,7 +357,7 @@ async function answerQuestion() {
     ].join("\n");
 
     const response = await model(prompt, {
-      max_new_tokens: 180,
+      max_new_tokens: 90,
       temperature: 0.2,
       do_sample: false
     });
@@ -351,7 +367,7 @@ async function answerQuestion() {
     if (!generated) {
       outputEl.textContent = fallbackAnswer(question);
     } else {
-      outputEl.textContent = stylizeAnswer(generated);
+      outputEl.textContent = preciseAnswer(generated);
     }
 
     statusEl.textContent = "Model status: Ready (running in your browser)";
