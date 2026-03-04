@@ -1,7 +1,7 @@
 window.AASHUTOSH_PROFILE = {
   name: "Aashutosh Shrestha",
   title: "Software Engineer",
-  location: "Osaka, Japan",
+  location: "Kathmandu, Nepal",
   birthplace: "Nepalgunj, Nepal",
   dob: "December 10, 1997",
   ideology: "Very leftist",
@@ -95,7 +95,7 @@ window.AASHUTOSH_PROFILE = {
 };
 
 window.AASHUTOSH_PROFILE_KB = [
-  "Aashutosh Shrestha is a Software Engineer based in Osaka, Japan.",
+  "Aashutosh Shrestha is a Software Engineer based in Kathmandu, Nepal.",
   "His main focus is mobile app development, especially iOS and cross-platform work.",
   "He also has professional experience in integrating LLMs, creating websites, and building backend systems.",
   "He has practical SDLC experience and has contributed to improving SDLC processes.",
